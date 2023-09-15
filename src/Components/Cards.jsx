@@ -1,87 +1,71 @@
-import React, { useState } from 'react'
-import ReactStars from 'react-stars';
-const Cards = () => {
-    const [data, setData] = useState([
-        {
-            name: "Expendables",
-            year: "2010",
-            rating: "3",
-            img: "https://th.bing.com/th/id/R.1ec0518ad4c74cf817c0c3f203f86fb6?rik=GRPEKLFQePu0Bg&riu=http%3a%2f%2fgraphicdesignjunction.com%2fwp-content%2fuploads%2f2012%2f05%2flarge%2fmovie-poster-32.jpg&ehk=z16SCM5GZPYbHYptvN3tDQ8aiUHuZa0Cv161sGbRkyc%3d&risl=&pid=ImgRaw&r=0 "
+import React, { useEffect, useState } from 'react'
+import {  Vortex} from 'react-loader-spinner';
+import ReactStars from 'react-stars'
+import { getDocs } from 'firebase/firestore';
 
-        },
-        {
-            name: "Expendables",
-            year: "2010",
-            rating: "2",
-            img: "https://th.bing.com/th/id/R.1ec0518ad4c74cf817c0c3f203f86fb6?rik=GRPEKLFQePu0Bg&riu=http%3a%2f%2fgraphicdesignjunction.com%2fwp-content%2fuploads%2f2012%2f05%2flarge%2fmovie-poster-32.jpg&ehk=z16SCM5GZPYbHYptvN3tDQ8aiUHuZa0Cv161sGbRkyc%3d&risl=&pid=ImgRaw&r=0 "
+import { Link } from 'react-router-dom';
+import { moviesRef } from '../firebase/firebase';
 
-        },
-        {
-            name: "Expendables",
-            year: "2010",
-            rating: "5",
-            img: "https://th.bing.com/th/id/R.1ec0518ad4c74cf817c0c3f203f86fb6?rik=GRPEKLFQePu0Bg&riu=http%3a%2f%2fgraphicdesignjunction.com%2fwp-content%2fuploads%2f2012%2f05%2flarge%2fmovie-poster-32.jpg&ehk=z16SCM5GZPYbHYptvN3tDQ8aiUHuZa0Cv161sGbRkyc%3d&risl=&pid=ImgRaw&r=0 "
+const  Card = () => {
+    
+    const [data, setData] = useState([]);
+    const [ loading, setLoading] = useState( false);
 
-        },
-        {
-            name: "Expendables",
-            year: "2010",
-            rating: "4",
-            img: "https://th.bing.com/th/id/R.1ec0518ad4c74cf817c0c3f203f86fb6?rik=GRPEKLFQePu0Bg&riu=http%3a%2f%2fgraphicdesignjunction.com%2fwp-content%2fuploads%2f2012%2f05%2flarge%2fmovie-poster-32.jpg&ehk=z16SCM5GZPYbHYptvN3tDQ8aiUHuZa0Cv161sGbRkyc%3d&risl=&pid=ImgRaw&r=0 "
-
-        },
-        {
-            name: "Expendables",
-            year: "2010",
-            rating: "3",
-            img: "https://th.bing.com/th/id/R.1ec0518ad4c74cf817c0c3f203f86fb6?rik=GRPEKLFQePu0Bg&riu=http%3a%2f%2fgraphicdesignjunction.com%2fwp-content%2fuploads%2f2012%2f05%2flarge%2fmovie-poster-32.jpg&ehk=z16SCM5GZPYbHYptvN3tDQ8aiUHuZa0Cv161sGbRkyc%3d&risl=&pid=ImgRaw&r=0 "
-
-        },
-        {
-            name: "Expendables",
-            year: "2010",
-            rating: "3",
-            img: "https://th.bing.com/th/id/R.1ec0518ad4c74cf817c0c3f203f86fb6?rik=GRPEKLFQePu0Bg&riu=http%3a%2f%2fgraphicdesignjunction.com%2fwp-content%2fuploads%2f2012%2f05%2flarge%2fmovie-poster-32.jpg&ehk=z16SCM5GZPYbHYptvN3tDQ8aiUHuZa0Cv161sGbRkyc%3d&risl=&pid=ImgRaw&r=0 "
-
-        },
-        {
-            name: "Expendables",
-            year: "2010",
-            rating: "2",
-            img: "https://th.bing.com/th/id/R.1ec0518ad4c74cf817c0c3f203f86fb6?rik=GRPEKLFQePu0Bg&riu=http%3a%2f%2fgraphicdesignjunction.com%2fwp-content%2fuploads%2f2012%2f05%2flarge%2fmovie-poster-32.jpg&ehk=z16SCM5GZPYbHYptvN3tDQ8aiUHuZa0Cv161sGbRkyc%3d&risl=&pid=ImgRaw&r=0 "
-
-        }
-
-    ]);;
+    useEffect(() =>{
+       async function getData(){
+        setLoading(true);
+       const _data  = await getDocs(moviesRef)
+      _data.forEach((doc) =>{
+        setData((prev) =>[...prev, {... (doc.data()), id: doc.id}])
+      })
+   setLoading(false);
+           }
+       getData();
+    },[])
     return (
-        <div className=' flex flex-wrap justify-between p-3  mt-2 '>
-            {data.map((e, i) => {
-                return (
+        <>
+            <div className=' mt-10 mb-2 text-center capitalize text-4xl'>Top Movie</div>
+            <hr className=' w-1/3 mx-auto' />
 
-                    <div key={i} className=' card shadow-lg p-2 hover:-translate-y-3
-                       font-medium cursor-pointer mt-6 transition-all  duration-500 '>
-                        <img className=' h-72'
-                            src={e.img}  />
-                        <h1>
-                            <span className=' text-red-500'>Name:</span>{e.name}
-                        </h1>
-                        <h1 className=' flex items-center mr-1'>
-                            <span className=' text-red-500'>Rating:</span>
-                            <ReactStars
-                            size={20}
-                            half={true}
-                            value={e.rating}
-                            edit={false}
-                            />
-                        </h1>
-                        <h1>
-                            <span className=' text-red-500'>year:</span>{e.year}
-                        </h1>
 
+            <div className=' flex flex-wrap justify-between px-3 mt-2 '>
+                { loading ? <div className=' w-full flex justify-center  h-96 items-center'> < Vortex height={90}  color=" white"/> </div>:
+                 data.map((e,i) => {
+                    return (
+              <Link to={`/details/${e.id}`}> <div key={i} className=' card font-medium shadow-lg p-2 hover:-translate-y-2
+               cursor-pointer mt-6 transition-all duration-500'>
+                    <img className='h-60 md:h-72' src={e.image} />
+                    <h1><span className=' text-gray-500 mr-1'>Title:</span>{e.title}
+                    </h1>
+                    <h1><span className=' text-gray-500 mr-1'>Rating:</span>
+                    <ReactStars
+                    size={20}
+                    half={true}
+                    value={5}
+                    edit={false}
+                     />
+                    </h1>
+                    <h1><span className=' text-gray-500 mr-1'>Year:</span>{e.year}
+                    </h1>
                     </div>
-                )
-            })}
-        </div>
+                    </Link> 
+                 ) })
+                 }
+                </div>
+        </>
     )
 }
-export default Cards;
+export default Card;
+
+
+// step 1 making card ,
+// step 2 define state using usestate ,
+// step 3  {
+//     name: "Gatsiby",
+//     rating:"5",
+//     year: "2015",
+//     img: "https://www.boredart.com/wp-content/uploads/2015/01/famous-movie-posters-of-All-time-Hollywood-18.jpg"
+
+//     }
+
+//     step 4 map the data 
